@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # نصب XRay
-wget https://github.com/XTLS/Xray-core/releases/download/v25.3.6/Xray-linux-64.zipz
+wget https://github.com/XTLS/Xray-core/releases/download/v25.3.6/Xray-linux-64.zip
 mv xray /usr/local/bin/
 chmod +x /usr/local/bin/xray
 
