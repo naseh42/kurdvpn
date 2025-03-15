@@ -1,53 +1,98 @@
 #!/bin/bash
 
-# Script to install Kurdan VPN Panel
+# Function to install required packages
+install_packages() {
+    echo "Updating and installing required packages..."
+    sudo apt-get update && sudo apt-get upgrade -y
+    sudo apt-get install -y git python3 python3-pip python3-venv
+}
 
-echo "Starting installation of Kurdan VPN Panel..."
+# Function to clone the repository
+clone_repository() {
+    echo "Cloning the Kurdan VPN Panel repository..."
+    if [ ! -d "/opt/kurdvpn" ]; then
+        git clone https://github.com/naseh42/kurdvpn.git /opt/kurdvpn
+    else
+        echo "Repository already cloned in /opt/kurdvpn. Skipping clone."
+    fi
+}
 
-# Update the system
-echo "Updating system..."
-apt update -y && apt upgrade -y
+# Function to create and activate virtual environment
+create_virtualenv() {
+    echo "Creating and activating virtual environment..."
+    cd /opt/kurdvpn
+    if [ ! -d "venv" ]; then
+        python3 -m venv venv
+    fi
+    source venv/bin/activate
+}
 
-# Install necessary packages
-echo "Installing required packages..."
-apt install -y python3 python3-pip python3-venv git
+# Function to install dependencies from requirements.txt
+install_requirements() {
+    echo "Installing Python dependencies..."
+    if [ ! -f "requirements.txt" ]; then
+        echo "requirements.txt not found. Creating it from current environment."
+        pip freeze > requirements.txt
+    fi
+    pip install -r requirements.txt
+}
 
-# Clone the Kurdan VPN Panel repository (replace with your repo URL)
-echo "Cloning Kurdan VPN Panel repository..."
-git clone https://github.com/yourusername/kurdvpn.git /opt/kurdvpn
+# Function to create .env file with default values
+create_env_file() {
+    echo "Creating .env file with default values..."
+    if [ ! -f ".env" ]; then
+        cat <<EOL > .env
+# Database Configuration
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=kurdvpn_db
 
-# Navigate to the directory
-cd /opt/kurdvpn
+# Secret Key for encryption (change this to a random value)
+SECRET_KEY=$(openssl rand -base64 32)
 
-# Set up the virtual environment
-echo "Setting up virtual environment..."
-python3 -m venv venv
+# Other configurations (modify based on your requirements)
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+EOL
+        echo ".env file created successfully."
+    else
+        echo ".env file already exists. Skipping creation."
+    fi
+}
 
-# Activate the virtual environment
-source venv/bin/activate
+# Function to create necessary directories
+create_directories() {
+    echo "Creating necessary directories..."
+    mkdir -p /opt/kurdvpn/logs
+    mkdir -p /opt/kurdvpn/data
+    mkdir -p /opt/kurdvpn/uploads
+}
 
-# Install the Python dependencies
-echo "Installing dependencies..."
-pip install -r requirements.txt
+# Function to run database migrations
+run_migrations() {
+    echo "Running database migrations (if applicable)..."
+    # Uncomment and modify the line below if you have Django or another framework that needs migrations
+    # python3 manage.py migrate
+    echo "Migrations completed (if applicable)."
+}
 
-# Run migrations if any
-echo "Running migrations..."
-# python manage.py migrate  # Uncomment if you have Django or similar migrations
+# Function to start the Kurdan VPN Panel
+start_vpn_panel() {
+    echo "Starting Kurdan VPN Panel..."
+    nohup python3 app.py & # Replace app.py with the appropriate start script
+    echo "Kurdan VPN Panel started successfully."
+}
 
-# Setup environment variables (if any)
-echo "Setting up environment variables..."
-cp .env.example .env
+# Main installation process
+install_packages
+clone_repository
+create_virtualenv
+install_requirements
+create_env_file
+create_directories
+run_migrations
+start_vpn_panel
 
-# Create necessary directories or files
-echo "Creating necessary directories..."
-mkdir -p /opt/kurdvpn/logs
-touch /opt/kurdvpn/logs/app.log
-
-# Start the VPN panel (replace with your panel's start command)
-echo "Starting the Kurdan VPN Panel..."
-nohup python3 manage.py runserver &  # Replace with your start command if different
-
-echo "Kurdan VPN Panel installation completed!"
-
-# Exit the script
-exit 0
+echo "Installation completed successfully!"
