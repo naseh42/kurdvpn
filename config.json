@@ -1,0 +1,48 @@
+{
+  "inbounds": [
+    {
+      "port": 10086,  // پورت برای ورودی
+      "listen": "0.0.0.0",  // تمام آدرس‌ها
+      "protocol": "vmess",  // پروتکل VMess
+      "settings": {
+        "clients": [
+          {
+            "id": "uuid1",  // UUID برای کلاینت
+            "alterId": 64
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",  // WebSocket
+        "wsSettings": {
+          "path": "/ws"  // مسیر WebSocket
+        }
+      }
+    },
+    {
+      "port": 10087,  // پورت برای ورودی
+      "listen": "0.0.0.0",
+      "protocol": "vless",  // پروتکل VLESS
+      "settings": {
+        "clients": [
+          {
+            "id": "uuid2",  // UUID برای کلاینت
+            "alterId": 64
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",  // WebSocket
+        "wsSettings": {
+          "path": "/ws"
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",  // خروجی آزاد
+      "settings": {}
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت VPN</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>پنل مدیریت VPN</h1>
+  </header>
+  <main>
+    <section id="user-management">
+      <h2>مدیریت کاربران</h2>
+      <button onclick="addUser()">افزودن کاربر</button>
+      <table>
+        <thead>
+          <tr>
+            <th>نام کاربر</th>
+            <th>وضعیت</th>
+            <th>مدیریت</th>
+          </tr>
+        </thead>
+        <tbody id="user-table">
+          <!-- لیست کاربران اینجا بارگذاری می‌شود -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="server-management">
+      <h2>مدیریت سرورها</h2>
+      <button onclick="addServer()">افزودن سرور</button>
+      <table>
+        <thead>
+          <tr>
+            <th>آدرس سرور</th>
+            <th>وضعیت</th>
+            <th>مدیریت</th>
+          </tr>
+        </thead>
+        <tbody id="server-table">
+          <!-- لیست سرورها اینجا بارگذاری می‌شود -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Kurdan VPN</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
